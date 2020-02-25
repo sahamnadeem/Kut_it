@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    protected $fillable=['uid','user_id','barber_id','total','user_location','booking_status_id','canceled_by','paid','balance'];
     public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
@@ -16,7 +17,7 @@ class Booking extends Model
         return $this->belongsTo(BookingLocation::class,'user_location');
     }
     public function details(){
-        return $this->belongsToMany(Service::class,'orders','booking_id','service_id');
+        return $this->belongsToMany(Service::class,'orders','booking_id','service_id')->withTimestamps();
     }
     public function status(){
         return $this->belongsTo(BookingStatus::class,'booking_status_id');
@@ -32,5 +33,9 @@ class Booking extends Model
     }
     public function reviews_through(){
         return $this->hasManyThrough(Review::class, Rating::class,'booking_id');
+    }
+    
+    public function services(){
+        return $this->belongsToMany(Service::class,'orders','booking_id','service_id')->withTimestamps();
     }
 }

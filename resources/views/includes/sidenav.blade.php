@@ -59,5 +59,13 @@
                 </span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('commission.index') }}" class="nav-link {{Request::is(['commission','commission/*']) ? 'active' : ''}}">
+                <i class="icon-coin-dollar"></i>
+                <span>
+					Commission Management
+                </span>
+            </a>
+        </li>
     </ul>
 </div>

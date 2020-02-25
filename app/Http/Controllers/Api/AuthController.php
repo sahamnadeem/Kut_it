@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -82,9 +83,15 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-    public function updateuser(UpdateUserRequest $request){
+    public function updateuser(Request $request){
         if ($request->password){
-            $request['password'] = bcrypt($request->password);
+            if(Hash::check($request->oldpassword, auth()->user()->getAuthPassword())){
+                $request['password'] = bcrypt($request->password);
+            }else{
+                return response()->json([
+                    'message' => 'Update Faild'
+                ],504);
+            }
         }
         Auth::user()->update($request->all());
         return response()->json([

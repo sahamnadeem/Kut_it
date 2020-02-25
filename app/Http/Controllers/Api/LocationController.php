@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 class LocationController extends Controller
 {
     public function index(Request $request){
-
         if ($location = UserLocation::where('user_id',auth()->user()->id)->first()){
             $location->update([
                 'lat'=>$request->lat,
@@ -25,6 +24,7 @@ class LocationController extends Controller
                 'user_id'=>auth()->user()->id
             ]);
         }
-        return Response(['message'=>'Location Updated Successfully'], 200);
+        auth()->user()->update(['last_action'=>now()]);
+        return Response(['status'=>'Location Updated Successfully'], 200);
     }
 }

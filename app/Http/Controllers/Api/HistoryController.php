@@ -12,14 +12,14 @@ class HistoryController extends Controller
 {
     public function barberHistory(){
         if (auth()->user()->barber_verified_at != null){
-            $history = Booking::with('details')->where('barber_id',auth()->user()->id)->orderBy('created_at')->paginate(10);
+            $history = Booking::with('services','user:id,name')->where('barber_id',auth()->user()->id)->orderBy('created_at')->paginate(10);
             return Response($history, 200);
         }else{
             return Response(['message'=>'You are not barber!'], 200);
         }
     }
     public function clientHistory(){
-        $history = Booking::with('details')->where('user_id',auth()->user()->id)->orderBy('created_at')->paginate(10);
+        $history = Booking::with('services','barber:id,name')->where('user_id',auth()->user()->id)->orderBy('created_at')->paginate(10);
         return Response($history, 200);
     }
 }

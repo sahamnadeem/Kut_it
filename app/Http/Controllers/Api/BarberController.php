@@ -38,7 +38,7 @@ class BarberController extends Controller
     }
     
     public function allservices(){
-        $services = Service::paginate(10);
+        $services = Service::all();
         return response()->json($services);
     }
     public function myservices(){

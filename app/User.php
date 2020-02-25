@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -12,9 +14,9 @@ use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Passport\HasApiTokens;
 use phpDocumentor\Reflection\Location;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Wallet
 {
-    use LaratrustUserTrait, HasApiTokens;
+    use LaratrustUserTrait, HasApiTokens, HasWallet;
     use Notifiable, SoftDeletes;
 
     /**
@@ -23,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email','age', 'password','phone_no','deleted_at','status_id','barber_verified_at','activation_token','is_barber','android_token','ios_token'
+        'name', 'email','age', 'password','last_action','phone_no','deleted_at','status_id','barber_verified_at','activation_token','is_working','is_barber','android_token','ios_token','count','requests'
     ];
 
     /**
@@ -103,5 +105,13 @@ class User extends Authenticatable
 
     public function balance(){
         return $this->hasOne(Balance::class,'user_id');
+    }
+
+    public function request(){
+        return $this->belongsToMany(User::class,'requests', 'barber_id','user_id');
+    }
+
+    public function request_barber(){
+        return $this->belongsToMany(User::class,'requests', 'user_id','barber_id');
     }
 }

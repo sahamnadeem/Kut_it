@@ -42,6 +42,7 @@ Route::group(['middleware' => ['role:admin', 'auth']], function() {
     Route::post('barber/accept/{id}', 'RequestController@barber')->name('barber.request.accpet');
     Route::delete('service/reject/{id}', 'RequestController@rejectservice')->name('request.accpet');
     Route::delete('barber/reject/{id}', 'RequestController@rejectbarber')->name('barber.request.accpet');
+    Route::resource('commission', 'CommissionController');
 });
 
 Route::group(['middleware' => 'auth'], function() {
