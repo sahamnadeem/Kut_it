@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $fillable=['uid','user_id','barber_id','total','user_location','booking_status_id','canceled_by','paid','balance'];
+    protected $fillable=['uid','user_id','barber_id','total','user_location','booking_status_id','canceled_by','paid','balance','cut'];
     public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
@@ -34,7 +34,7 @@ class Booking extends Model
     public function reviews_through(){
         return $this->hasManyThrough(Review::class, Rating::class,'booking_id');
     }
-    
+
     public function services(){
         return $this->belongsToMany(Service::class,'orders','booking_id','service_id')->withTimestamps();
     }

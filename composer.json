@@ -17,6 +17,7 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
         "santigarcor/laratrust": "5.2.*",
+        "stripe/stripe-php": "^7.27",
         "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {

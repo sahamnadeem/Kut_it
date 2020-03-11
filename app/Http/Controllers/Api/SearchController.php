@@ -222,11 +222,11 @@ class SearchController extends Controller
     }
 
     public function update_state(Request $request){
+        $commission = Setting::where('key','commission')->first();
         $booking  = Booking::whereId($request->booking_id)->first();
-        $booking->update(['booking_status_id'=>$request->status_id]);
+        $booking->update(['booking_status_id'=>$request->status_id,'cut'=>$commission]);
         if ($request->status_id === 1){
             auth()->user()->update(['is_working'=>1]);
-            $commission = Setting::where('key','commission')->first();
             $wallet = ($booking->total-(($commission->value/100)*$booking->total));
             auth()->user()->deposit($wallet);
         }

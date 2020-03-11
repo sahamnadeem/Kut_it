@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth:api'], function(){
         Route::get('my/rating','Api\RatingController@barberRating');
         Route::post('reject/request/{id}','Api\SearchController@reject');
         Route::post('accept/request/{id}','Api\SearchController@accept');
+        Route::get('wallet','Api\WalletController@balance');
+        Route::get('wallet_summery','Api\WalletController@wallet');
     });
 });
 
