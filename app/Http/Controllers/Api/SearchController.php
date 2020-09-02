@@ -9,11 +9,13 @@ use App\Order;
 use App\Service;
 use App\Setting;
 use App\User;
+use Stripe\Charge;
 use App\UserLocation;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+
 
 class SearchController extends Controller
 {
@@ -227,6 +229,7 @@ class SearchController extends Controller
         $booking->update(['booking_status_id'=>$request->status_id,'cut'=>$commission]);
         if ($request->status_id === 1){
             auth()->user()->update(['is_working'=>1]);
+            $charge = Charge::create(['amount' => $booking->total*100, 'currency' => 'usd', 'source' => $request->invoice_no]);
             $wallet = ($booking->total-(($commission->value/100)*$booking->total));
             auth()->user()->deposit($wallet);
         }
@@ -234,6 +237,6 @@ class SearchController extends Controller
             auth()->user()->update(['is_working'=>1]);
             $booking->update(['canceled_by'=>auth()->user()->id]);
         }
-        return \response()->json(['messages'=>'status updated successfully'], 200);
+        return \response()->json(['messages'=>'status updated successfully', 'payment'=>$charge], 200);
     }
 }
